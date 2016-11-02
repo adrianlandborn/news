@@ -35,7 +35,7 @@
 				android:layout_height="wrap_content" />
 		</LinearLayout>
 
-        <!--<include layout="@layout/no_network_layout" />-->
+        <include layout="@layout/error" />
 
 	</FrameLayout>
 

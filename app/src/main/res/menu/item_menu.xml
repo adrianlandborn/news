@@ -6,5 +6,5 @@
         android:id="@+id/share"
         happy:showAsAction="always"
         android:icon="@drawable/ic_action_share"
-        android:title="Dela..."/>
+        android:title="Share..."/>
 </menu>

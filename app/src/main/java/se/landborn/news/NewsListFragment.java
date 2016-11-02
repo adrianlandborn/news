@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +49,7 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mActivity = (MainActivity) getActivity();
@@ -59,12 +57,11 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mProgressView = mActivity.findViewById(R.id.progress_container_id);
 
-        showProgress(true);
-
         if (savedInstanceState == null) {
             // Fetch data from server
             loadData();
         } else {
+            // Reuse saved data
             updateViews((List<NewsListItem>) savedInstanceState.getSerializable(DATA));
         }
 
@@ -84,10 +81,12 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
 
     private void loadData() {
         if (!hasNetworkConnection()) {
-            //TODO Show No network view
-            Toast.makeText(mActivity, "Please check your connection", Toast.LENGTH_SHORT).show();
+            mActivity.findViewById(R.id.error_layout).setVisibility(View.VISIBLE);
+            showErrorView("Please check your connection");
+            showProgress(false);
             return;
         }
+        showProgress(true);
 
         // TODO Extract task to own class
         // TODO Retain task during rotation
@@ -127,8 +126,6 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
                     }
 
                     urlConnection.disconnect();
-
-//                    Thread.sleep(3000);
                     return items;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -136,8 +133,6 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
                 }
                 return null;
             }
@@ -153,6 +148,7 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
         if (mActivity != null && !mActivity.isFinishing()) {
 
             if (items != null) {
+                hideErrorView();
                 if (mAdapter != null) {
                     mAdapter.setItems(items);
                     mAdapter.notifyDataSetChanged();
@@ -161,7 +157,7 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
                     setListAdapter(mAdapter);
                 }
             } else {
-                Toast.makeText(mActivity, "Could not fetch data", Toast.LENGTH_SHORT).show();
+                showErrorView("Could not fetch data");
             }
             showProgress(false);
         }
@@ -201,7 +197,17 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
     }
 
     private boolean hasNetworkConnection() {
-        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    private void showErrorView(String message) {
+        TextView tv = (TextView) mActivity.findViewById(R.id.error_text);
+        tv.setText(message);
+        mActivity.findViewById(R.id.error_layout).setVisibility(View.VISIBLE);
+    }
+
+    private void hideErrorView() {
+        mActivity.findViewById(R.id.error_layout).setVisibility(View.INVISIBLE);
     }
 }
