@@ -2,7 +2,6 @@ package se.landborn.news;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,7 +58,7 @@ public class NewsItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                supportFinishAfterTransition();
                 return true;
             case R.id.share:
                 shareItem();

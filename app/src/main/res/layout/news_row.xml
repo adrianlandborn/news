@@ -10,6 +10,7 @@
         android:layout_height="100dp"
         android:background="@android:color/darker_gray"
         android:gravity="center_vertical"
+        android:transitionName="image"
         android:scaleType="centerCrop" />
 
     <TextView

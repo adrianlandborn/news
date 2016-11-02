@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -174,7 +175,10 @@ public class NewsListFragment extends ListFragment implements SwipeRefreshLayout
         intent.putExtra(NewsItemActivity.CONTENT, item.getContent());
         intent.putExtra(NewsItemActivity.URL, item.getImageUrl());
 
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(mActivity, v, "image");
+
+        startActivity(intent, options.toBundle());
     }
 
     @Override
