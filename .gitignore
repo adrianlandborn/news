@@ -88,4 +88,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-.idea/workspace.xml
+
+# IDEA files
+.idea/*
