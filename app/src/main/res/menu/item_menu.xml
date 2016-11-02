@@ -3,6 +3,12 @@
     xmlns:happy="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/search"
+        happy:showAsAction="always"
+        android:icon="@drawable/ic_action_google"
+        android:title="Google this!"/>
+
+    <item
         android:id="@+id/share"
         happy:showAsAction="always"
         android:icon="@drawable/ic_action_share"

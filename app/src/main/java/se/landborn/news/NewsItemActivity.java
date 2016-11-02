@@ -1,6 +1,7 @@
 package se.landborn.news;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -60,12 +61,21 @@ public class NewsItemActivity extends AppCompatActivity {
             case android.R.id.home:
                 supportFinishAfterTransition();
                 return true;
+            case R.id.search:
+                searchItem();
+                return true;
             case R.id.share:
                 shareItem();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void searchItem() {
+        Uri uri = Uri.parse("http://www.google.com/#q=" + mTitle);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     private void shareItem() {
