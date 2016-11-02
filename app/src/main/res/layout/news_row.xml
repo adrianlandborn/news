@@ -19,7 +19,6 @@
         android:layout_margin="8dp"
         android:gravity="center_vertical"
         android:maxLines="2"
-        android:text="TO BE REPLACED WITH ACTUAL NEWS TITLE"
         android:textSize="15sp" />
 
 </LinearLayout>

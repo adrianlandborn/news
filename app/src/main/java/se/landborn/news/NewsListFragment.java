@@ -1,6 +1,7 @@
 package se.landborn.news;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,8 +34,7 @@ import java.util.List;
  * Created by Adrian on 11/2/2016.
  */
 
-public class NewsListFragment extends ListFragment implements AdapterView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+public class NewsListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static String TAG = NewsListFragment.class.getSimpleName();
     public final static String DATA = "news_data";
@@ -166,8 +167,14 @@ public class NewsListFragment extends ListFragment implements AdapterView.OnItem
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO Handle item clicks
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(mActivity, NewsItemActivity.class);
+        NewsListItem item = mAdapter.getItem(position);
+        intent.putExtra(NewsItemActivity.TITLE, item.getTitle());
+        intent.putExtra(NewsItemActivity.CONTENT, item.getContent());
+        intent.putExtra(NewsItemActivity.URL, item.getImageUrl());
+
+        startActivity(intent);
     }
 
     @Override
