@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,11 +21,16 @@ public class NewsItemActivity extends AppCompatActivity {
     public final static String CONTENT = "content";
     public final static String URL = "url";
 
+    private String mTitle;
+    private String mContent;
+    private String mImageUrl;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_news);
 
         ImageView imageView = (ImageView) findViewById(R.id.item_image);
@@ -33,13 +39,44 @@ public class NewsItemActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        titleView.setText(bundle.getString(TITLE));
-        contentView.setText(bundle.getString(CONTENT));
-        Picasso.with(this).load(bundle.getString(URL)).into(imageView);
+        mTitle = bundle.getString(TITLE);
+        mContent = bundle.getString(CONTENT);
+        mImageUrl = bundle.getString(URL);
+
+        titleView.setText(mTitle);
+        contentView.setText(mContent);
+        Picasso.with(this).load(mImageUrl).into(imageView);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.share:
+                shareItem();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void shareItem() {
+        String message = "Hey! You have to read this!\n\n" +
+                mTitle + " \n\n" +
+                mContent + " \n\n" +
+                mImageUrl;
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, "Share..."));
     }
 }
