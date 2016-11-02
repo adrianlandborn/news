@@ -42,18 +42,23 @@ public class NewsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        ViewHolder vh;
 
         if (view == null) {
             view = View.inflate(mContext, R.layout.news_row, null);
-        }
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.item_image);
-        TextView textView = (TextView) view.findViewById(R.id.item_title);
+            vh = new ViewHolder();
+            vh.image = (ImageView) view.findViewById(R.id.item_image);
+            vh.title = (TextView) view.findViewById(R.id.item_title);
+            view.setTag(vh);
+        } else {
+            vh = (ViewHolder) view.getTag();
+        }
 
         NewsListItem item = mItems.get(position);
 
-        Picasso.with(mContext).load(item.getImageUrl()).into(imageView);
-        textView.setText(item.getTitle());
+        Picasso.with(mContext).load(item.getImageUrl()).into(vh.image);
+        vh.title.setText(item.getTitle());
 
         return view;
     }
@@ -64,5 +69,10 @@ public class NewsListAdapter extends BaseAdapter {
 
     public List<NewsListItem> getItems() {
         return mItems;
+    }
+
+    static class ViewHolder {
+        TextView title;
+        ImageView image;
     }
 }
