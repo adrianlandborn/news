@@ -61,4 +61,8 @@ public class NewsListAdapter extends BaseAdapter {
     public void setItems(List<NewsListItem> items) {
         mItems = items;
     }
+
+    public List<NewsListItem> getItems() {
+        return mItems;
+    }
 }

@@ -36,6 +36,7 @@ public class NewsListFragment extends ListFragment implements AdapterView.OnItem
         SwipeRefreshLayout.OnRefreshListener {
 
     public static String TAG = NewsListFragment.class.getSimpleName();
+    public final static String DATA = "news_data";
 
     private MainActivity mActivity;
     private View mProgressView;
@@ -62,12 +63,21 @@ public class NewsListFragment extends ListFragment implements AdapterView.OnItem
             // Fetch data from server
             loadData();
         } else {
-            // TODO Reload data locally
-            updateViews(null);
-            showProgress(false);
-
+            updateViews((List<NewsListItem>) savedInstanceState.getSerializable(DATA));
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mAdapter != null) {
+            ArrayList<NewsListItem> items = (ArrayList<NewsListItem>) mAdapter.getItems();
+            if (items != null && !items.isEmpty()) {
+                outState.putSerializable(DATA, items);
+            }
+        }
     }
 
     private void loadData() {
@@ -115,6 +125,8 @@ public class NewsListFragment extends ListFragment implements AdapterView.OnItem
                     }
 
                     urlConnection.disconnect();
+
+//                    Thread.sleep(3000);
                     return items;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -122,6 +134,8 @@ public class NewsListFragment extends ListFragment implements AdapterView.OnItem
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
                 }
                 return null;
             }
